@@ -8,3 +8,6 @@
 [submodule "external/glfw"]
 	path = external/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "external/websocketcpp"]
+	path = external/websocketcpp
+	url = https://github.com/zaphoyd/websocketpp.git

@@ -5,11 +5,16 @@ cppdialect "C++20"
 targetdir "bin/%{cfg.buildcfg}"
 staticruntime "off"
 
-files {"src/**.h", "src/**.cpp"}
+files {"src/**.h", "src/**.cpp", "../external/glad/glad.c", "../external/imgui/backends/imgui_impl_glfw.cpp",
+       "../external/imgui/backends/imgui_impl_opengl3.cpp"}
 
-includedirs {"../external/imgui", "../external/spdlog/include", "../external/glfw/include", "../external"}
+includedirs {"../external/imgui", "../external/spdlog/include", "../external/glfw/include", "../external",
+             "../external/websocketcpp"}
 
-links {"ImGui", "opengl32"}
+libdirs {"../external/glfw/build/src/Debug"}
+
+links {"ImGui", "opengl32", "glfw3", "gdi32", "user32", "shell32"}
+-- "websocketcpp"
 
 targetdir("../bin/" .. outputdir .. "/%{prj.name}")
 objdir("../bin-int/" .. outputdir .. "/%{prj.name}")

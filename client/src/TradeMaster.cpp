@@ -4,14 +4,13 @@
 #include "glad/glad.h"
 #include "examples/libs/glfw/include/GLFW/glfw3.h"
 #include <stdio.h>
-
-
+#include <iostream>
 
 // Forward declare callback functions
-void glfw_error_callback(int error, const char* description);
-void glfw_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void glfw_error_callback(int error, const char *description);
+void glfw_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
 
-int main(int, char**)
+int main(int, char **)
 {
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
@@ -19,12 +18,13 @@ int main(int, char**)
         return -1;
 
     // Create window with graphics context
-    const char* glsl_version = "#version 130";
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Dear ImGui Example", NULL, NULL);
+    const char *glsl_version = "#version 130";
+    GLFWwindow *window = glfwCreateWindow(1280, 720, "Trade Master", NULL, NULL);
     if (window == NULL)
         return -1;
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
+    glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE); // Start window maximized
+    glfwSwapInterval(1);                       // Enable vsync
 
     // Initialize OpenGL loader
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -36,7 +36,8 @@ int main(int, char**)
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGuiIO &io = ImGui::GetIO();
+    (void)io;
     ImGui::StyleColorsDark();
 
     // Setup Platform/Renderer bindings
@@ -55,8 +56,19 @@ int main(int, char**)
         ImGui::NewFrame();
 
         // Create a simple window
-        ImGui::Begin("Hello, world!");
-        ImGui::Text("This is some useful text.");
+        ImGui::Begin("Trade Master Terminal");
+        ImGui::Text("Username");
+        static char username[128] = "";
+        ImGui::InputText("##username", username, IM_ARRAYSIZE(username));
+        ImGui::Text("Password");
+        static char password[128] = "";
+        ImGui::InputText("##password", password, IM_ARRAYSIZE(password), ImGuiInputTextFlags_Password);
+        ImGui::Spacing();
+        if (ImGui::Button("Log In"))
+            std::cout << "Logging in with username: " << username << " and password: " << password << std::endl;
+        ImGui::SameLine();
+        if (ImGui::Button("Sign Up"))
+            std::cout << "Signing up to be done..." << std::endl;
         ImGui::End();
 
         // Rendering
@@ -82,12 +94,12 @@ int main(int, char**)
     return 0;
 }
 
-void glfw_error_callback(int error, const char* description)
+void glfw_error_callback(int error, const char *description)
 {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
-void glfw_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void glfw_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
