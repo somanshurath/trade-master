@@ -5,6 +5,7 @@
 #include "examples/libs/glfw/include/GLFW/glfw3.h"
 #include <stdio.h>
 #include <iostream>
+#include "network/WebSocketClient.h"
 
 // Forward declare callback functions
 void glfw_error_callback(int error, const char *description);
@@ -44,6 +45,9 @@ int main(int, char **)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
+    WebSocketClient ws_client("wss://test.deribit.com/ws/api/v2");
+    ws_client.Connect();
+
     // Main loop
     while (!glfwWindowShouldClose(window))
     {
@@ -57,18 +61,17 @@ int main(int, char **)
 
         // Create a simple window
         ImGui::Begin("Trade Master Terminal");
-        ImGui::Text("Username");
-        static char username[128] = "";
-        ImGui::InputText("##username", username, IM_ARRAYSIZE(username));
-        ImGui::Text("Password");
-        static char password[128] = "";
-        ImGui::InputText("##password", password, IM_ARRAYSIZE(password), ImGuiInputTextFlags_Password);
+        ImGui::Text("Client ID");
+        static char client_id[128] = "";
+        ImGui::InputText("##client_id", client_id, IM_ARRAYSIZE(client_id));
+        ImGui::Text("Client Secret");
+        static char client_secret[128] = "";
+        ImGui::InputText("##client_secret", client_secret, IM_ARRAYSIZE(client_secret), ImGuiInputTextFlags_Password);
         ImGui::Spacing();
         if (ImGui::Button("Log In"))
-            std::cout << "Logging in with username: " << username << " and password: " << password << std::endl;
-        ImGui::SameLine();
-        if (ImGui::Button("Sign Up"))
-            std::cout << "Signing up to be done..." << std::endl;
+        {
+            ws_client.Authenticate(client_id, client_secret);
+        }
         ImGui::End();
 
         // Rendering

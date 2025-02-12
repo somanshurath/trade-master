@@ -11,3 +11,13 @@
 [submodule "external/websocketcpp"]
 	path = external/websocketcpp
 	url = https://github.com/zaphoyd/websocketpp.git
+[submodule "external/boost"]
+	path = external/boost
+	url = https://github.com/boostorg/boost.git
+[submodule "external/asio"]
+	path = external/asio
+	url = https://github.com/chriskohlhoff/asio.git
+	branch = asio-1-4-branch
+[submodule "external/json"]
+	path = external/json
+	url = https://github.com/nlohmann/json.git

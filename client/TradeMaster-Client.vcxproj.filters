@@ -27,6 +27,12 @@
     <ClInclude Include="src\layout\ControlCenterer.h">
       <Filter>src\layout</Filter>
     </ClInclude>
+    <ClInclude Include="src\layout\ThemeUI.h">
+      <Filter>src\layout</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\WebSocketClient.h">
+      <Filter>src\network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\external\glad\glad.c">
@@ -38,10 +44,10 @@
     <ClCompile Include="..\external\imgui\backends\imgui_impl_opengl3.cpp">
       <Filter>external\imgui\backends</Filter>
     </ClCompile>
-    <ClCompile Include="src\TradeMaster.cpp">
+    <ClCompile Include="src\App.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\network\test.cpp">
+    <ClCompile Include="src\network\WebSocketClient.cpp">
       <Filter>src\network</Filter>
     </ClCompile>
   </ItemGroup>
