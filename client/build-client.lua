@@ -11,9 +11,6 @@ includedirs {"../external/imgui", "../external/spdlog/include", "../external/glf
              "../external/websocketcpp", "../external/boost", "../external/asio/asio/include",
              "../external/json/include", "../external/openssl/include"}
 
--- build script to build the dependencies and copy the required files to the runtime directory
--- ./b2 --build-dir=C:\main\trade-master\external\boost\build --toolset=msvc-14.3 --with-system --with-filesystem variant=debug,release link=static,shared threading=multi runtime-link=static,shared address-model=64 stage
-
 libdirs {"../runtime"}
 
 links {"ImGui", "opengl32", "glfw3", "gdi32", "user32", "shell32", "libboost_system-vc143-mt-sgd-x64-1_88",

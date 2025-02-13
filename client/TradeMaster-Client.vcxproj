@@ -89,7 +89,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;gdi32.lib;user32.lib;shell32.lib;libboost_system-vc143-mt-sgd-x64-1_88.lib;libboost_filesystem-vc143-mt-sgd-x64-1_88.lib;libssl.lib;libcrypto.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ImGui.lib;opengl32.lib;glfw3.lib;gdi32.lib;user32.lib;shell32.lib;libboost_system-vc143-mt-sgd-x64-1_88.lib;libboost_filesystem-vc143-mt-sgd-x64-1_88.lib;libssl.lib;libcrypto.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\runtime;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -114,7 +114,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;gdi32.lib;user32.lib;shell32.lib;libboost_system-vc143-mt-sgd-x64-1_88.lib;libboost_filesystem-vc143-mt-sgd-x64-1_88.lib;libssl.lib;libcrypto.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ImGui.lib;opengl32.lib;glfw3.lib;gdi32.lib;user32.lib;shell32.lib;libboost_system-vc143-mt-sgd-x64-1_88.lib;libboost_filesystem-vc143-mt-sgd-x64-1_88.lib;libssl.lib;libcrypto.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\runtime;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -139,7 +139,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;gdi32.lib;user32.lib;shell32.lib;libboost_system-vc143-mt-sgd-x64-1_88.lib;libboost_filesystem-vc143-mt-sgd-x64-1_88.lib;libssl.lib;libcrypto.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ImGui.lib;opengl32.lib;glfw3.lib;gdi32.lib;user32.lib;shell32.lib;libboost_system-vc143-mt-sgd-x64-1_88.lib;libboost_filesystem-vc143-mt-sgd-x64-1_88.lib;libssl.lib;libcrypto.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\runtime;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -164,11 +164,6 @@
     <ClCompile Include="src\network\api\Authentication.cpp" />
     <ClCompile Include="src\network\api\MarketData.cpp" />
     <ClCompile Include="src\utils\fonts\Fonts.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\external\imgui\ImGui.vcxproj">
-      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
