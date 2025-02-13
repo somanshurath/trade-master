@@ -12,19 +12,17 @@
 #include "utils/fonts/Fonts.h"
 
 #include "ui/ControlPanel.h"
+#include "ui/Landing/Login.h"
 
-// Forward declare callback functions
 void glfw_error_callback(int error, const char *description);
 void glfw_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
 
 int main(int, char **)
 {
-    // Setup window
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
         return -1;
 
-    // Create window with graphics context
     const char *glsl_version = "#version 130";
     GLFWmonitor *primaryMonitor = glfwGetPrimaryMonitor();
     const GLFWvidmode *mode = glfwGetVideoMode(primaryMonitor);
@@ -35,14 +33,12 @@ int main(int, char **)
     glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE); // Start window maximized
     glfwSwapInterval(1);                       // Enable vsync
 
-    // Initialize OpenGL loader
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         fprintf(stderr, "Failed to initialize OpenGL loader!\n");
         return -1;
     }
 
-    // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
@@ -55,9 +51,8 @@ int main(int, char **)
     style.Colors[ImGuiCol_TitleBgCollapsed] = old_title_bg_active;
 
     g_calibriFont = io.Fonts->AddFontFromFileTTF("./src/utils/fonts/calibri.ttf", 14.0f);
-    g_iconsFont = io.Fonts->AddFontFromFileTTF("./src/utils/fonts/icons.ttf", 16.0f);
+    g_iconsFont = io.Fonts->AddFontFromFileTTF("./src/utils/fonts/icons.ttf", 14.0f);
 
-    // Setup Platform/Renderer bindings
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
@@ -65,15 +60,12 @@ int main(int, char **)
     ws_client.SetUserId(USER_ID);
     ws_client.Connect();
 
+    Login login(ws_client);
     ControlPanel control_panel(ws_client);
 
-    // Main loop
     while (!glfwWindowShouldClose(window))
     {
-        // Poll and handle events
         glfwPollEvents();
-
-        // Start the ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -84,26 +76,9 @@ int main(int, char **)
         }
         else
         {
-            ImGui::Begin("Trade Master Terminal", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse);
-            ImGui::Text("Client ID");
-            static char client_id[128];
-            strncpy(client_id, CLIENT_ID.c_str(), sizeof(client_id) - 1);
-            client_id[sizeof(client_id) - 1] = '\0';
-            ImGui::InputText("##client_id", client_id, IM_ARRAYSIZE(client_id));
-            ImGui::Text("Client Secret");
-            static char client_secret[128];
-            strncpy(client_secret, CLIENT_SECRET.c_str(), sizeof(client_secret) - 1);
-            client_secret[sizeof(client_secret) - 1] = '\0';
-            ImGui::InputText("##client_secret", client_secret, IM_ARRAYSIZE(client_secret), ImGuiInputTextFlags_Password);
-            ImGui::Spacing();
-            if (ImGui::Button("Log In"))
-            {
-                ws_client.Authenticate(client_id, client_secret);
-            }
-            ImGui::End();
+            login.Render();
         }
 
-        // Rendering
         ImGui::Render();
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
@@ -117,12 +92,10 @@ int main(int, char **)
         glfwSwapBuffers(window);
     }
 
-    // Cleanup
     ws_client.Close();
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
-
     glfwDestroyWindow(window);
     glfwTerminate();
 

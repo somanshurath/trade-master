@@ -36,7 +36,7 @@ public:
                 changed = true;
             }
 
-            if (ImGui::Button(tabs[i]))
+            if (ImGui::Button(tabs[i], ImVec2(120, 0)))
             {
                 if (i == 0)
                 {
@@ -67,18 +67,21 @@ public:
             ImGui::SameLine();
 
             ImGui::PushFont(g_iconsFont);
+            ImGui::SetCursorPosX(ImGui::GetWindowWidth() - ImGui::CalcTextSize("ZZ").x - ImGui::GetStyle().ItemSpacing.x);
             ImGui::PushID(i);
             if (ImGui::Button("Z"))
             {
                 if (i == 0)
                 {
                     ws_client.FetchAccountSummary();
+                    account_summary_renderer.Show();
                 }
                 else if (i == 1)
                 {
                     ws_client.FetchPositions();
+                    positions_renderer.Show();
                 }
-                        }
+            }
             ImGui::PopID();
             ImGui::PopFont();
             if (ImGui::IsItemHovered())
