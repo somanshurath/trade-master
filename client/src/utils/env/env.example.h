@@ -1,6 +1,5 @@
 // COPY THIS FILE TO env.h AND FILL IN THE VALUES
 
-// env.h
 #ifndef ENV_H
 #define ENV_H
 

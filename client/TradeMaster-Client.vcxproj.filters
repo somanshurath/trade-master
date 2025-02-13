@@ -16,8 +16,8 @@
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\layout">
-      <UniqueIdentifier>{5A8C4A68-4644-8CB5-AF4B-65119B2227A6}</UniqueIdentifier>
+    <Filter Include="src\app">
+      <UniqueIdentifier>{FDEA2FA9-69CA-AE44-72E2-391BDE4015A6}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\network">
       <UniqueIdentifier>{C6028F14-32B8-070A-BBAC-01E12761FE0D}</UniqueIdentifier>
@@ -31,6 +31,9 @@
     <Filter Include="src\ui\AccountManagement">
       <UniqueIdentifier>{339908D3-1FBE-5753-4809-3DE3348D5671}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ui\Landing">
+      <UniqueIdentifier>{A6D73631-92A5-2A37-7B39-9B5D67A6069C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\utils">
       <UniqueIdentifier>{6DAA42B6-D914-F72C-2253-A8D28EFCD481}</UniqueIdentifier>
     </Filter>
@@ -40,13 +43,13 @@
     <Filter Include="src\utils\fonts">
       <UniqueIdentifier>{8602BD47-F28D-2A0C-FB9E-AD0067A9860C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\utils\layout">
+      <UniqueIdentifier>{9AE3644C-86DC-839E-AF0E-69239B6663AA}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\layout\ControlCenterer.h">
-      <Filter>src\layout</Filter>
-    </ClInclude>
-    <ClInclude Include="src\layout\ThemeUI.h">
-      <Filter>src\layout</Filter>
+    <ClInclude Include="src\app\AppLayer.h">
+      <Filter>src\app</Filter>
     </ClInclude>
     <ClInclude Include="src\network\WebSocketHandler.h">
       <Filter>src\network</Filter>
@@ -60,6 +63,9 @@
     <ClInclude Include="src\ui\ControlPanel.h">
       <Filter>src\ui</Filter>
     </ClInclude>
+    <ClInclude Include="src\ui\Landing\Login.h">
+      <Filter>src\ui\Landing</Filter>
+    </ClInclude>
     <ClInclude Include="src\utils\env\env.example.h">
       <Filter>src\utils\env</Filter>
     </ClInclude>
@@ -68,6 +74,12 @@
     </ClInclude>
     <ClInclude Include="src\utils\fonts\Fonts.h">
       <Filter>src\utils\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\layout\ControlCenterer.h">
+      <Filter>src\utils\layout</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\layout\ThemeUI.h">
+      <Filter>src\utils\layout</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -80,8 +92,11 @@
     <ClCompile Include="..\external\imgui\backends\imgui_impl_opengl3.cpp">
       <Filter>external\imgui\backends</Filter>
     </ClCompile>
-    <ClCompile Include="src\App.cpp">
+    <ClCompile Include="src\Main.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\AppLayer.cpp">
+      <Filter>src\app</Filter>
     </ClCompile>
     <ClCompile Include="src\network\WebSocketHandler.cpp">
       <Filter>src\network</Filter>

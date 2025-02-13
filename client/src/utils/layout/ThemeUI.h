@@ -1,5 +1,4 @@
 #pragma once
-
 #include <imgui.h>
 
 constexpr auto accentColor = IM_COL32(236, 158, 36, 255);
@@ -25,7 +24,7 @@ constexpr auto invalidPrefabColor = IM_COL32(222, 43, 43, 255);
 constexpr auto missingMeshColor = IM_COL32(230, 102, 76, 255);
 constexpr auto meshNotSetColor = IM_COL32(250, 101, 23, 255);
 
-ImVec4 GetColorFromImCol32(ImU32 color)
+inline ImVec4 GetColorFromImCol32(ImU32 color)
 {
     return ImVec4(
         (float)((color & 0x00FF0000) >> 16) / 255.0f,

@@ -1,7 +1,8 @@
+#pragma once
 #include <imgui.h>
 #include <chrono>
 #include <string>
-#include "../../layout/ThemeUI.h"
+#include "../../utils/layout/ThemeUI.h"
 #include "../../network/WebSocketHandler.h"
 
 struct PositionParameters
@@ -27,20 +28,20 @@ private:
         {"Size", "size", 0},                   // in USD
         {"Size Currency", "size_currency", 0}, // in Base Currency
         // {"Average Price", "average_price", 0},
-        {"Floating Profit/Loss", "floating_profit_loss", 0},
+        {"Floating P/L", "floating_profit_loss", 0},
         {"Index Price", "index_price", 0},
         // {"Interest Value", "interest_value", 0},
         // {"Leverage", "leverage", 0},
         {"Market Price", "mark_price", 0},
         {"Initial Margin", "initial_margin", 0},
-        {"Maintenance Margin", "maintenance_margin", 0},
+        {"Mainten. Margin", "maintenance_margin", 0},
         {"Delta", "delta", 0},
         {"Est. Liq. Price", "estimated_liquidation_price", 0},
         // {"Open Orders Margin", "open_orders_margin", 0},
         // {"Realized Funding", "realized_funding", 0},
-        {"Realized Profit/Loss", "realized_profit_loss", 0},
+        {"Realized P/L", "realized_profit_loss", 0},
         {"Settlement Price", "settlement_price", 0},
-        {"Total Profit/Loss", "total_profit_loss", 0},
+        {"Total P/L", "total_profit_loss", 0},
     };
 
     bool selectedItems[std::size(PARAMS)] = {true};
@@ -110,9 +111,9 @@ private:
 
     void RenderParamCombo()
     {
-        if (ImGui::BeginCombo("##PositionParamsToDisplay", "Selected Parameters"))
+        if (ImGui::BeginCombo("##PositionParamsToDisplay", "Selected Parameters", ImGuiComboFlags_WidthFitPreview))
         {
-            for (size_t i = 1; i < std::size(PARAMS); ++i)
+            for (size_t i = 3; i < std::size(PARAMS); ++i)
             {
                 ImGui::Selectable(PARAMS[i].label, &selectedItems[i], ImGuiSelectableFlags_DontClosePopups);
             }
@@ -127,10 +128,10 @@ private:
         auto now = std::chrono::system_clock::now();
         auto age = std::chrono::duration_cast<std::chrono::seconds>(now - req_time).count();
 
-        ImGui::SetCursorPosX(ImGui::GetWindowWidth() - ImGui::CalcTextSize("updated 10 secs ago").x - ImGui::GetStyle().ItemSpacing.x);
+        ImGui::SetCursorPosX(ImGui::GetWindowWidth() - ImGui::CalcTextSize("10s").x - ImGui::GetStyle().ItemSpacing.x);
         ImGui::TextColored(
             GetColorFromImCol32(textDarkerColor),
-            "updated %ld secs ago",
+            "%lds",
             age);
     }
 

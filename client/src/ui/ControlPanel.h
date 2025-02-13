@@ -1,7 +1,8 @@
+#pragma once
 #include <imgui.h>
 #include <chrono>
 #include <string>
-#include "../layout/ThemeUI.h"
+#include "../utils/layout/ThemeUI.h"
 #include "../utils/fonts/Fonts.h"
 #include "../network/WebSocketHandler.h"
 
@@ -67,7 +68,7 @@ public:
             ImGui::SameLine();
 
             ImGui::PushFont(g_iconsFont);
-            ImGui::SetCursorPosX(ImGui::GetWindowWidth() - ImGui::CalcTextSize("ZZ").x - ImGui::GetStyle().ItemSpacing.x);
+            ImGui::SetCursorPosX(ImGui::GetWindowWidth() - ImGui::CalcTextSize("Z").x - ImGui::GetStyle().ItemSpacing.x - 10);
             ImGui::PushID(i);
             if (ImGui::Button("Z"))
             {

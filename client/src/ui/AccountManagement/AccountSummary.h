@@ -1,6 +1,8 @@
+#pragma once
 #include <imgui.h>
 #include <chrono>
 #include <string>
+#include "../../utils/layout/ThemeUI.h"
 #include "../../network/WebSocketHandler.h"
 
 struct AccountMetric
@@ -43,10 +45,10 @@ private:
         auto now = std::chrono::system_clock::now();
         auto age = std::chrono::duration_cast<std::chrono::seconds>(now - req_time).count();
 
-        ImGui::SetCursorPosX(ImGui::GetWindowWidth() - ImGui::CalcTextSize("updated 10 secs ago").x - ImGui::GetStyle().ItemSpacing.x);
+        ImGui::SetCursorPosX(ImGui::GetWindowWidth() - ImGui::CalcTextSize("10s").x - ImGui::GetStyle().ItemSpacing.x);
         ImGui::TextColored(
             GetColorFromImCol32(textDarkerColor),
-            "updated %ld secs ago",
+            "%lds",
             age);
     }
 
