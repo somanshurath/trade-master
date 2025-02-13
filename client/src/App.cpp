@@ -5,7 +5,12 @@
 #include "examples/libs/glfw/include/GLFW/glfw3.h"
 #include <stdio.h>
 #include <iostream>
-#include "network/WebSocketClient.h"
+#include <future>
+
+#include "network/WebSocketHandler.h"
+#include "utils/env.h"
+
+#include "ui/AccountSummary.h"
 
 // Forward declare callback functions
 void glfw_error_callback(int error, const char *description);
@@ -20,7 +25,9 @@ int main(int, char **)
 
     // Create window with graphics context
     const char *glsl_version = "#version 130";
-    GLFWwindow *window = glfwCreateWindow(1280, 720, "Trade Master", NULL, NULL);
+    GLFWmonitor *primaryMonitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode *mode = glfwGetVideoMode(primaryMonitor);
+    GLFWwindow *window = glfwCreateWindow(mode->width, mode->height, "Trade Master", NULL, NULL);
     if (window == NULL)
         return -1;
     glfwMakeContextCurrent(window);
@@ -45,8 +52,10 @@ int main(int, char **)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-    WebSocketClient ws_client("wss://test.deribit.com/ws/api/v2");
+    WebSocketHandler ws_client("wss://test.deribit.com/ws/api/v2");
+    ws_client.SetUserId(USER_ID);
     ws_client.Connect();
+    bool fetch_account_summary = false;
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -59,20 +68,30 @@ int main(int, char **)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // Create a simple window
-        ImGui::Begin("Trade Master Terminal");
-        ImGui::Text("Client ID");
-        static char client_id[128] = "";
-        ImGui::InputText("##client_id", client_id, IM_ARRAYSIZE(client_id));
-        ImGui::Text("Client Secret");
-        static char client_secret[128] = "";
-        ImGui::InputText("##client_secret", client_secret, IM_ARRAYSIZE(client_secret), ImGuiInputTextFlags_Password);
-        ImGui::Spacing();
-        if (ImGui::Button("Log In"))
+        if (ws_client.IsAuthenticated())
         {
-            ws_client.Authenticate(client_id, client_secret);
+            RenderAccountSummary(ws_client);
         }
-        ImGui::End();
+        else
+        {
+            ImGui::Begin("Trade Master Terminal", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse);
+            ImGui::Text("Client ID");
+            static char client_id[128];
+            strncpy(client_id, CLIENT_ID.c_str(), sizeof(client_id) - 1);
+            client_id[sizeof(client_id) - 1] = '\0';
+            ImGui::InputText("##client_id", client_id, IM_ARRAYSIZE(client_id));
+            ImGui::Text("Client Secret");
+            static char client_secret[128];
+            strncpy(client_secret, CLIENT_SECRET.c_str(), sizeof(client_secret) - 1);
+            client_secret[sizeof(client_secret) - 1] = '\0';
+            ImGui::InputText("##client_secret", client_secret, IM_ARRAYSIZE(client_secret), ImGuiInputTextFlags_Password);
+            ImGui::Spacing();
+            if (ImGui::Button("Log In"))
+            {
+                ws_client.Authenticate(client_id, client_secret);
+            }
+            ImGui::End();
+        }
 
         // Rendering
         ImGui::Render();
@@ -81,12 +100,15 @@ int main(int, char **)
         glViewport(0, 0, display_w, display_h);
         glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
         glClear(GL_COLOR_BUFFER_BIT);
+        GLint last_program;
+        glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+        glUseProgram(last_program);
         glfwSwapBuffers(window);
     }
 
     // Cleanup
+    ws_client.Close();
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();

@@ -25,6 +25,7 @@
 *.la
 *.a
 *.lib
+!/runtime/*.lib
 
 # Executables
 *.exe
@@ -39,3 +40,5 @@ bin-int/
 
 *.vcxproj.user
 *.log
+
+env.h

@@ -22,6 +22,15 @@
     <Filter Include="src\network">
       <UniqueIdentifier>{C6028F14-32B8-070A-BBAC-01E12761FE0D}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\network\api">
+      <UniqueIdentifier>{0F675AF6-7BF2-C7BA-8403-4BAFF00D24BB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui">
+      <UniqueIdentifier>{7A4F661C-66F1-90F2-4FAC-A4463BED1743}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils">
+      <UniqueIdentifier>{6DAA42B6-D914-F72C-2253-A8D28EFCD481}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\layout\ControlCenterer.h">
@@ -30,8 +39,17 @@
     <ClInclude Include="src\layout\ThemeUI.h">
       <Filter>src\layout</Filter>
     </ClInclude>
-    <ClInclude Include="src\network\WebSocketClient.h">
+    <ClInclude Include="src\network\WebSocketHandler.h">
       <Filter>src\network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\AccountSummary.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\env.example.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\env.h">
+      <Filter>src\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -47,8 +65,14 @@
     <ClCompile Include="src\App.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\network\WebSocketClient.cpp">
+    <ClCompile Include="src\network\WebSocketHandler.cpp">
       <Filter>src\network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\api\Account.cpp">
+      <Filter>src\network\api</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\api\Authentication.cpp">
+      <Filter>src\network\api</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
