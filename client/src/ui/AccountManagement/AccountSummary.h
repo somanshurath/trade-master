@@ -1,0 +1,124 @@
+#include <imgui.h>
+#include <chrono>
+#include <string>
+#include "../../network/WebSocketHandler.h"
+
+struct AccountMetric
+{
+    const char *label;
+    const char *json_key;
+};
+
+class AccountSummaryRenderer
+{
+private:
+    WebSocketHandler &ws_client;
+    static constexpr size_t BUFFER_SIZE = 256;
+    static constexpr int REFRESH_INTERVAL = 10;
+    bool firstLoad = true;
+    bool m_show_window = true;
+
+    static constexpr AccountMetric METRICS[] = {
+        {"Equity", "equity"},
+        {"Available Funds", "available_funds"},
+        {"Balance", "balance"},
+        {"Initial Margin", "initial_margin"},
+        {"Maintenance Margin", "maintenance_margin"}};
+
+    char buffer[BUFFER_SIZE];
+    std::chrono::system_clock::time_point last_refresh;
+
+    void RenderMetric(const nlohmann::json &summary, const AccountMetric &metric)
+    {
+        if (summary.contains(metric.json_key))
+        {
+            double value = summary[metric.json_key].get<double>();
+            snprintf(buffer, BUFFER_SIZE, "%s: %.8f", metric.label, value);
+            ImGui::TextUnformatted(buffer);
+        }
+    }
+
+    void RenderLastUpdateTime(const std::chrono::system_clock::time_point &req_time)
+    {
+        auto now = std::chrono::system_clock::now();
+        auto age = std::chrono::duration_cast<std::chrono::seconds>(now - req_time).count();
+
+        ImGui::SetCursorPosX(ImGui::GetWindowWidth() - ImGui::CalcTextSize("updated 10 secs ago").x - ImGui::GetStyle().ItemSpacing.x);
+        ImGui::TextColored(
+            GetColorFromImCol32(textDarkerColor),
+            "updated %ld secs ago",
+            age);
+    }
+
+    bool ShouldAutoRefresh() const
+    {
+
+        auto now = std::chrono::system_clock::now();
+        return std::chrono::duration_cast<std::chrono::seconds>(now - last_refresh).count() > REFRESH_INTERVAL;
+    }
+
+public:
+    AccountSummaryRenderer(WebSocketHandler &ws_client) : ws_client(ws_client) {}
+
+    void Render()
+    {
+        if (m_show_window == false)
+            return;
+
+        if (firstLoad || ShouldAutoRefresh())
+        {
+            ws_client.FetchAccountSummary();
+            last_refresh = std::chrono::system_clock::now();
+            firstLoad = false;
+        }
+
+        ImGui::Begin("Account Summary", nullptr,
+                     ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse);
+
+        const auto &summary = ws_client.GetAccountSummary();
+        if (!summary.empty())
+        {
+            ImGui::Spacing();
+
+            for (const auto &metric : METRICS)
+            {
+                RenderMetric(summary, metric);
+            }
+
+            if (summary.contains("equity") && summary.contains("maintenance_margin"))
+            {
+                double equity = summary["equity"].get<double>();
+                // double initial_margin = summary["initial_margin"].get<double>();
+                // double maintenance_margin = summary["maintenance_margin"].get<double>();
+                // double ratio = equity / (initial_margin + maintenance_margin);
+                double net_profit = summary["total_pl"].get<double>();
+
+                ImGui::Separator();
+                ImGui::Text("Account Health:");
+
+                ImVec4 health_color;
+                if (net_profit > 0.0)
+                    health_color = ImVec4(0.0f, 1.0f, 0.0f, 1.0f); // Green
+                else
+                    health_color = ImVec4(1.0f, 0.0f, 0.0f, 1.0f); // Red
+
+                ImGui::PushStyleColor(ImGuiCol_PlotHistogram, health_color);
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 0, 0, 1));
+                ImGui::ProgressBar(static_cast<float>(1),
+                                   ImVec2(-1, 0),
+                                   std::to_string(net_profit).c_str());
+                ImGui::PopStyleColor(2);
+            }
+            RenderLastUpdateTime(ws_client.GetAccountSummaryReqTime());
+        }
+        else
+            ImGui::TextDisabled("No data available");
+
+        ImGui::End();
+    }
+
+    bool IsVisible() const { return m_show_window; }
+    void Show() { m_show_window = true; }
+    void Hide() { m_show_window = false; }
+    void Toggle() { m_show_window = !m_show_window; }
+};

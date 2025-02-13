@@ -8,9 +8,10 @@
 #include <future>
 
 #include "network/WebSocketHandler.h"
-#include "utils/env.h"
+#include "utils/env/env.h"
+#include "utils/fonts/Fonts.h"
 
-#include "ui/AccountSummary.h"
+#include "ui/ControlPanel.h"
 
 // Forward declare callback functions
 void glfw_error_callback(int error, const char *description);
@@ -48,6 +49,14 @@ int main(int, char **)
     (void)io;
     ImGui::StyleColorsDark();
 
+    ImGuiStyle &style = ImGui::GetStyle();
+    ImVec4 old_title_bg_active = style.Colors[ImGuiCol_TitleBgActive];
+    style.Colors[ImGuiCol_TitleBg] = old_title_bg_active;
+    style.Colors[ImGuiCol_TitleBgCollapsed] = old_title_bg_active;
+
+    g_calibriFont = io.Fonts->AddFontFromFileTTF("./src/utils/fonts/calibri.ttf", 14.0f);
+    g_iconsFont = io.Fonts->AddFontFromFileTTF("./src/utils/fonts/icons.ttf", 16.0f);
+
     // Setup Platform/Renderer bindings
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
@@ -55,7 +64,8 @@ int main(int, char **)
     WebSocketHandler ws_client("wss://test.deribit.com/ws/api/v2");
     ws_client.SetUserId(USER_ID);
     ws_client.Connect();
-    bool fetch_account_summary = false;
+
+    ControlPanel control_panel(ws_client);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -70,7 +80,7 @@ int main(int, char **)
 
         if (ws_client.IsAuthenticated())
         {
-            RenderAccountSummary(ws_client);
+            control_panel.Render();
         }
         else
         {
@@ -98,7 +108,7 @@ int main(int, char **)
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
-        glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         GLint last_program;
         glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);

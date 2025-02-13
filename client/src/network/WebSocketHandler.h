@@ -37,6 +37,20 @@ public:
         return m_account_summary;
     }
 
+    void FetchPositions();
+    nlohmann::json GetPositions() const
+    {
+        std::lock_guard<std::mutex> lock(m_positions_mutex);
+        return m_positions;
+    }
+
+    void FetchAccessLog();
+    nlohmann::json GetAccessLog() const
+    {
+        std::lock_guard<std::mutex> lock(m_access_log_mutex);
+        return m_access_log;
+    }
+
     // Getters and setters
     void SetUserId(const std::string &id) { user_id = id; }
     std::string GetUserId() const { return user_id; }
@@ -52,6 +66,8 @@ public:
     uint32_t GetExpiresIn() const { return expires_in; }
 
     std::chrono::system_clock::time_point GetAccountSummaryReqTime() const { return m_account_summary_req_time; }
+    std::chrono::system_clock::time_point GetAccessLogReqTime() const { return m_access_log_req_time; }
+    std::chrono::system_clock::time_point GetPositionsReqTime() const { return m_positions_req_time; }
 
     // Message handling
     void RegisterMessageHandler(const std::string &method,
@@ -77,6 +93,14 @@ private:
     mutable std::mutex m_account_summary_mutex;
     nlohmann::json m_account_summary;
     std::chrono::system_clock::time_point m_account_summary_req_time;
+
+    mutable std::mutex m_access_log_mutex;
+    nlohmann::json m_access_log;
+    std::chrono::system_clock::time_point m_access_log_req_time;
+
+    mutable std::mutex m_positions_mutex;
+    nlohmann::json m_positions;
+    std::chrono::system_clock::time_point m_positions_req_time;
 
     // Message handling
     std::unordered_map<std::string, std::function<void(const nlohmann::json &)>> message_handlers;

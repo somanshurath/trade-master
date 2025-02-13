@@ -28,8 +28,17 @@
     <Filter Include="src\ui">
       <UniqueIdentifier>{7A4F661C-66F1-90F2-4FAC-A4463BED1743}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ui\AccountManagement">
+      <UniqueIdentifier>{339908D3-1FBE-5753-4809-3DE3348D5671}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\utils">
       <UniqueIdentifier>{6DAA42B6-D914-F72C-2253-A8D28EFCD481}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils\env">
+      <UniqueIdentifier>{059B5713-715B-D349-3A96-1CC7A6151826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils\fonts">
+      <UniqueIdentifier>{8602BD47-F28D-2A0C-FB9E-AD0067A9860C}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -42,14 +51,23 @@
     <ClInclude Include="src\network\WebSocketHandler.h">
       <Filter>src\network</Filter>
     </ClInclude>
-    <ClInclude Include="src\ui\AccountSummary.h">
+    <ClInclude Include="src\ui\AccountManagement\AccountSummary.h">
+      <Filter>src\ui\AccountManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\AccountManagement\Positions.h">
+      <Filter>src\ui\AccountManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\ControlPanel.h">
       <Filter>src\ui</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\env.example.h">
-      <Filter>src\utils</Filter>
+    <ClInclude Include="src\utils\env\env.example.h">
+      <Filter>src\utils\env</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\env.h">
-      <Filter>src\utils</Filter>
+    <ClInclude Include="src\utils\env\env.h">
+      <Filter>src\utils\env</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fonts\Fonts.h">
+      <Filter>src\utils\fonts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -68,11 +86,17 @@
     <ClCompile Include="src\network\WebSocketHandler.cpp">
       <Filter>src\network</Filter>
     </ClCompile>
-    <ClCompile Include="src\network\api\Account.cpp">
+    <ClCompile Include="src\network\api\AccountManagement.cpp">
       <Filter>src\network\api</Filter>
     </ClCompile>
     <ClCompile Include="src\network\api\Authentication.cpp">
       <Filter>src\network\api</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\api\MarketData.cpp">
+      <Filter>src\network\api</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\fonts\Fonts.cpp">
+      <Filter>src\utils\fonts</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
