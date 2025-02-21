@@ -5,11 +5,11 @@ cppdialect "C++11"
 targetdir "bin/%{cfg.buildcfg}"
 
 files {"src/**.h", "src/**.cpp", "../external/glad/glad.c", "../external/imgui/backends/imgui_impl_glfw.cpp",
-       "../external/imgui/backends/imgui_impl_opengl3.cpp"}
+       "../external/imgui/backends/imgui_impl_opengl3.cpp", "../external/implot/implot.cpp", "../external/implot/implot_items.cpp"}
 
 includedirs {"../external/imgui", "../external/spdlog/include", "../external/glfw/include", "../external",
              "../external/websocketcpp", "../external/boost", "../external/asio/asio/include",
-             "../external/json/include", "../external/openssl/include"}
+             "../external/json/include", "../external/openssl/include", "../external/implot"}
 
 libdirs {"../runtime"}
 

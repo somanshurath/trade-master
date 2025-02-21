@@ -1,6 +1,7 @@
 #include "./AppLayer.h"
 #include "../utils/env/env.h"
 #include "../utils/fonts/Fonts.h"
+#include <implot.h>
 
 AppLayer::AppLayer()
     : m_GlslVersion("#version 130"), m_WsClient("wss://test.deribit.com/ws/api/v2"), m_Login(m_WsClient), m_ControlPanel(m_WsClient)
@@ -53,6 +54,7 @@ bool AppLayer::OnStart()
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImPlot::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
     ImGui::StyleColorsDark();
     SetImGuiStyle();
@@ -82,6 +84,12 @@ void AppLayer::OnUIRender()
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
         m_ControlPanel.Render();
+
+        ImGui::Begin("Wecome to Trade Master");
+        ImGui::Text("Real-time market data and trading platform");
+        ImGui::Text("Developed by: somanshurath");
+        ImGui::Text("Version: 1.0.0");
+        ImGui::End();
     }
     else
     {
@@ -108,6 +116,7 @@ void AppLayer::OnExit()
     m_WsClient.Close();
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
+    ImPlot::DestroyContext();
     ImGui::DestroyContext();
     glfwDestroyWindow(m_Window);
     glfwTerminate();

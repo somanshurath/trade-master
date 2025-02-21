@@ -75,6 +75,13 @@ public:
             return nlohmann::json();
     }
 
+    void FetchChartData(const std::string &instrument, const time_t &start_timestamp, const time_t &end_timestamp, const std::string &resolution);
+    nlohmann::json GetChartData()
+    {
+        std::lock_guard<std::mutex> lock(m_chart_data_mutex);
+        return m_chart_data;
+    }
+
     // Getters and setters
     void SetUserId(const std::string &id) { user_id = id; }
     std::string GetUserId() const { return user_id; }
@@ -94,6 +101,7 @@ public:
     std::chrono::system_clock::time_point GetPositionsReqTime() const { return m_positions_req_time; }
     std::chrono::system_clock::time_point GetOpenOrdersReqTime() const { return m_open_orders_req_time; }
     std::chrono::system_clock::time_point GetBookSummaryReqTime() const { return m_book_summary_req_time; }
+    std::chrono::system_clock::time_point GetChartDataReqTime() const { return m_chart_data_req_time; }
 
     // Message handling
     void RegisterMessageHandler(const std::string &method,
@@ -135,6 +143,10 @@ private:
     mutable std::mutex m_book_summary_mutex;
     std::unordered_map<std::string, std::unordered_map<std::string, nlohmann::json>> m_book_summary;
     std::chrono::system_clock::time_point m_book_summary_req_time;
+
+    mutable std::mutex m_chart_data_mutex;
+    nlohmann::json m_chart_data;
+    std::chrono::system_clock::time_point m_chart_data_req_time;
 
     // Message handling
     std::unordered_map<std::string, std::function<void(const nlohmann::json &)>> message_handlers;

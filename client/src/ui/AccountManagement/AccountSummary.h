@@ -95,9 +95,9 @@ public:
 
                 ImVec4 health_color;
                 if (net_profit > 0.0)
-                    health_color = ImVec4(0.0f, 1.0f, 0.0f, 1.0f); // Green
+                    health_color = ImVec4(0.000f, 1.000f, 0.441f, 1.000f);
                 else
-                    health_color = ImVec4(1.0f, 0.0f, 0.0f, 1.0f); // Red
+                    health_color = ImVec4(0.853f, 0.050f, 0.310f, 1.000f);
 
                 ImGui::PushStyleColor(ImGuiCol_PlotHistogram, health_color);
                 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 0, 0, 1));

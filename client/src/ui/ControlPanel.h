@@ -11,6 +11,7 @@
 #include "AccountManagement/Positions.h"
 #include "Orders/OpenOrders.h"
 #include "MarketData/BookSummary.h"
+#include "MarketData/ChartData.h"
 #include <bitset>
 
 class ControlPanel
@@ -25,6 +26,7 @@ public:
         renderers.push_back(std::make_unique<PositionsRenderer>(ws_client));
         renderers.push_back(std::make_unique<OpenOrdersRenderer>(ws_client));
         renderers.push_back(std::make_unique<BookSummaryRenderer>(ws_client));
+        renderers.push_back(std::make_unique<ChartDataRenderer>(ws_client));
     }
 
     void Render()

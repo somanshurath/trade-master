@@ -83,9 +83,9 @@ private:
                         if (param.color == COLOR)
                         {
                             if (value > 0)
-                                color = ImVec4(0.0f, 1.0f, 0.0f, 1.0f);
+                                color = ImVec4(0.000f, 1.000f, 0.441f, 1.000f);
                             else if (value < 0)
-                                color = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
+                                color = ImVec4(0.853f, 0.050f, 0.310f, 1.000f);
                             ImGui::PushStyleColor(ImGuiCol_Text, color);
                         }
                     }
@@ -108,9 +108,9 @@ private:
                         if (param.color == COLOR)
                         {
                             if (value > 0)
-                                color = ImVec4(0.0f, 1.0f, 0.0f, 1.0f);
+                                color = ImVec4(0.000f, 1.000f, 0.441f, 1.000f);
                             else if (value < 0)
-                                color = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
+                                color = ImVec4(0.853f, 0.050f, 0.310f, 1.000f);
                             ImGui::PushStyleColor(ImGuiCol_Text, color);
                         }
                         ImGui::TextUnformatted(buffer);

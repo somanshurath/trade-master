@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>IMGUI_DEFINE_MATH_OPERATORS;WL_PLATFORM_WINDOWS;WL_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\external\imgui;..\external\spdlog\include;..\external\glfw\include;..\external;..\external\websocketcpp;..\external\boost;..\external\asio\asio\include;..\external\json\include;..\external\openssl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\external\imgui;..\external\spdlog\include;..\external\glfw\include;..\external;..\external\websocketcpp;..\external\boost;..\external\asio\asio\include;..\external\json\include;..\external\openssl\include;..\external\implot;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -98,7 +98,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>IMGUI_DEFINE_MATH_OPERATORS;WL_PLATFORM_WINDOWS;WL_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\external\imgui;..\external\spdlog\include;..\external\glfw\include;..\external;..\external\websocketcpp;..\external\boost;..\external\asio\asio\include;..\external\json\include;..\external\openssl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\external\imgui;..\external\spdlog\include;..\external\glfw\include;..\external;..\external\websocketcpp;..\external\boost;..\external\asio\asio\include;..\external\json\include;..\external\openssl\include;..\external\implot;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -123,7 +123,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>IMGUI_DEFINE_MATH_OPERATORS;WL_PLATFORM_WINDOWS;WL_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\external\imgui;..\external\spdlog\include;..\external\glfw\include;..\external;..\external\websocketcpp;..\external\boost;..\external\asio\asio\include;..\external\json\include;..\external\openssl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\external\imgui;..\external\spdlog\include;..\external\glfw\include;..\external;..\external\websocketcpp;..\external\boost;..\external\asio\asio\include;..\external\json\include;..\external\openssl\include;..\external\implot;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -145,7 +145,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\app\AppLayer.h" />
-    <ClInclude Include="src\common\Instruments.h" />
     <ClInclude Include="src\network\WebSocketHandler.h" />
     <ClInclude Include="src\ui\AccountManagement\AccountSummary.h" />
     <ClInclude Include="src\ui\AccountManagement\Positions.h" />
@@ -153,6 +152,7 @@
     <ClInclude Include="src\ui\ControlPanel.h" />
     <ClInclude Include="src\ui\Landing\Login.h" />
     <ClInclude Include="src\ui\MarketData\BookSummary.h" />
+    <ClInclude Include="src\ui\MarketData\ChartData.h" />
     <ClInclude Include="src\ui\Orders\OpenOrders.h" />
     <ClInclude Include="src\ui\Orders\OrderPlacement.h" />
     <ClInclude Include="src\utils\env\env.example.h" />
@@ -165,6 +165,8 @@
     <ClCompile Include="..\external\glad\glad.c" />
     <ClCompile Include="..\external\imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="..\external\imgui\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\external\implot\implot.cpp" />
+    <ClCompile Include="..\external\implot\implot_items.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\app\AppLayer.cpp" />
     <ClCompile Include="src\network\WebSocketHandler.cpp" />

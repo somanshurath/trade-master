@@ -13,14 +13,14 @@
     <Filter Include="external\imgui\backends">
       <UniqueIdentifier>{FC42705C-687A-B8F3-7184-1C17DD3ADFEC}</UniqueIdentifier>
     </Filter>
+    <Filter Include="external\implot">
+      <UniqueIdentifier>{2CE1141F-986C-82E3-A17D-05D80D88DEE3}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\app">
       <UniqueIdentifier>{FDEA2FA9-69CA-AE44-72E2-391BDE4015A6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\common">
-      <UniqueIdentifier>{E5D74254-D18F-84A1-3A97-5DFD266E1F92}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\network">
       <UniqueIdentifier>{C6028F14-32B8-070A-BBAC-01E12761FE0D}</UniqueIdentifier>
@@ -60,9 +60,6 @@
     <ClInclude Include="src\app\AppLayer.h">
       <Filter>src\app</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\Instruments.h">
-      <Filter>src\common</Filter>
-    </ClInclude>
     <ClInclude Include="src\network\WebSocketHandler.h">
       <Filter>src\network</Filter>
     </ClInclude>
@@ -82,6 +79,9 @@
       <Filter>src\ui\Landing</Filter>
     </ClInclude>
     <ClInclude Include="src\ui\MarketData\BookSummary.h">
+      <Filter>src\ui\MarketData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\MarketData\ChartData.h">
       <Filter>src\ui\MarketData</Filter>
     </ClInclude>
     <ClInclude Include="src\ui\Orders\OpenOrders.h">
@@ -115,6 +115,12 @@
     </ClCompile>
     <ClCompile Include="..\external\imgui\backends\imgui_impl_opengl3.cpp">
       <Filter>external\imgui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\implot\implot.cpp">
+      <Filter>external\implot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\implot\implot_items.cpp">
+      <Filter>external\implot</Filter>
     </ClCompile>
     <ClCompile Include="src\Main.cpp">
       <Filter>src</Filter>
