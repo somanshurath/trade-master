@@ -145,11 +145,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\app\AppLayer.h" />
+    <ClInclude Include="src\common\Instruments.h" />
     <ClInclude Include="src\network\WebSocketHandler.h" />
     <ClInclude Include="src\ui\AccountManagement\AccountSummary.h" />
     <ClInclude Include="src\ui\AccountManagement\Positions.h" />
+    <ClInclude Include="src\ui\BaseRenderer.h" />
     <ClInclude Include="src\ui\ControlPanel.h" />
     <ClInclude Include="src\ui\Landing\Login.h" />
+    <ClInclude Include="src\ui\MarketData\BookSummary.h" />
+    <ClInclude Include="src\ui\Orders\OpenOrders.h" />
+    <ClInclude Include="src\ui\Orders\OrderPlacement.h" />
     <ClInclude Include="src\utils\env\env.example.h" />
     <ClInclude Include="src\utils\env\env.h" />
     <ClInclude Include="src\utils\fonts\Fonts.h" />
@@ -166,6 +171,7 @@
     <ClCompile Include="src\network\api\AccountManagement.cpp" />
     <ClCompile Include="src\network\api\Authentication.cpp" />
     <ClCompile Include="src\network\api\MarketData.cpp" />
+    <ClCompile Include="src\network\api\Orders.cpp" />
     <ClCompile Include="src\utils\fonts\Fonts.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

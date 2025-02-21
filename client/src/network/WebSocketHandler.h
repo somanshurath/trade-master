@@ -1,5 +1,4 @@
-#ifndef WEBSOCKET_CLIENT_H
-#define WEBSOCKET_CLIENT_H
+#pragma once
 
 #define ASIO_STANDALONE
 
@@ -44,11 +43,36 @@ public:
         return m_positions;
     }
 
+    // Orders
+    void PlaceOrder(const std::string &instrument_name, const std::string &direction, const std::string &order_type, const std::string &amount, const std::string &contracts, const std::string &price, const std::string &time_in_force);
+    void FetchOpenOrders();
+    nlohmann::json GetOpenOrders() const
+    {
+        std::lock_guard<std::mutex> lock(m_open_orders_mutex);
+        return m_open_orders;
+    }
+
     void FetchAccessLog();
     nlohmann::json GetAccessLog() const
     {
         std::lock_guard<std::mutex> lock(m_access_log_mutex);
         return m_access_log;
+    }
+
+    // Market Data
+    void FetchBookSummary(const std::string &symbol, const std::string &kind);
+    nlohmann::json GetBookSummary(const std::string &symbol, const std::string &kind) const
+    {
+        std::lock_guard<std::mutex> lock(m_book_summary_mutex);
+        std::string s_kind = kind;
+        if (kind == "")
+        {
+            s_kind = "all";
+        }
+        if (m_book_summary.find(symbol) != m_book_summary.end() && m_book_summary.at(symbol).find(s_kind) != m_book_summary.at(symbol).end())
+            return m_book_summary.at(symbol).at(s_kind);
+        else
+            return nlohmann::json();
     }
 
     // Getters and setters
@@ -68,6 +92,8 @@ public:
     std::chrono::system_clock::time_point GetAccountSummaryReqTime() const { return m_account_summary_req_time; }
     std::chrono::system_clock::time_point GetAccessLogReqTime() const { return m_access_log_req_time; }
     std::chrono::system_clock::time_point GetPositionsReqTime() const { return m_positions_req_time; }
+    std::chrono::system_clock::time_point GetOpenOrdersReqTime() const { return m_open_orders_req_time; }
+    std::chrono::system_clock::time_point GetBookSummaryReqTime() const { return m_book_summary_req_time; }
 
     // Message handling
     void RegisterMessageHandler(const std::string &method,
@@ -102,6 +128,14 @@ private:
     nlohmann::json m_positions;
     std::chrono::system_clock::time_point m_positions_req_time;
 
+    mutable std::mutex m_open_orders_mutex;
+    nlohmann::json m_open_orders;
+    std::chrono::system_clock::time_point m_open_orders_req_time;
+
+    mutable std::mutex m_book_summary_mutex;
+    std::unordered_map<std::string, std::unordered_map<std::string, nlohmann::json>> m_book_summary;
+    std::chrono::system_clock::time_point m_book_summary_req_time;
+
     // Message handling
     std::unordered_map<std::string, std::function<void(const nlohmann::json &)>> message_handlers;
     std::atomic<int> request_id{0};
@@ -120,5 +154,3 @@ private:
     void HandleError(const nlohmann::json &error);
     int GetNextRequestId();
 };
-
-#endif // WEBSOCKET_CLIENT_H

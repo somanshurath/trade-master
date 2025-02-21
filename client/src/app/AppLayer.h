@@ -30,4 +30,6 @@ public:
     
     bool IsRunning() const;
     void Run();
+
+    bool firstLoad = true;
 };

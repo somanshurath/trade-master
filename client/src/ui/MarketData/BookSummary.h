@@ -9,7 +9,7 @@
 #define COLOR 1
 #define NO_COLOR 0
 
-struct PositionParameters
+struct BookSummayParameters
 {
     const char *label;
     const char *json_key;
@@ -17,7 +17,7 @@ struct PositionParameters
     const int color;
 };
 
-class PositionsRenderer : public BaseRenderer
+class BookSummaryRenderer : public BaseRenderer
 {
 private:
     WebSocketHandler &ws_client;
@@ -26,40 +26,26 @@ private:
     char buffer[BUFFER_SIZE];
     std::chrono::system_clock::time_point last_refresh;
 
-    static constexpr PositionParameters PARAMS[] = {
-        {"Instr. Name", "instrument_name", 1, NO_COLOR},
-        {"Kind", "kind", 1, NO_COLOR},
-        {"Direction", "direction", 1, NO_COLOR},
-        {"Amount", "size", 0, NO_COLOR},         // in USD
-        {"Value", "size_currency", 0, NO_COLOR}, // in Base Currency
-        {"Avg Price", "average_price", 0, NO_COLOR},
-        {"ELP", "estimated_liquidation_price", 0, NO_COLOR},
-        {"PNL", "floating_profit_loss", 0, COLOR},
-        {"ROI", "$roi", 0, COLOR},
-        {"Index Price", "index_price", 0, NO_COLOR},
-        // {"Interest Value", "interest_value", 0, NO_COLOR},
-        // {"Leverage", "leverage", 0, NO_COLOR},
-        {"Market Price", "mark_price", 0, NO_COLOR},
-        {"Initial Margin", "initial_margin", 0, NO_COLOR},
-        {"Mainten. Margin", "maintenance_margin", 0, NO_COLOR},
-        {"Delta", "delta", 0, NO_COLOR},
-
-        // {"Open Orders Margin", "open_orders_margin", 0, NO_COLOR},
-        // {"Realized Funding", "realized_funding", 0, NO_COLOR},
-        {"Realized P/L", "realized_profit_loss", 0, NO_COLOR},
-        {"Settlement Price", "settlement_price", 0, NO_COLOR},
-        {"Total P/L", "total_profit_loss", 0, NO_COLOR},
+    static constexpr BookSummayParameters PARAMS[] = {
+        {"Instrument", "instrument_name", 1, NO_COLOR},
+        {"24h Low", "low", 0, NO_COLOR},
+        {"24h High", "high", 0, NO_COLOR},
+        {"24h Change", "price_change", 0, COLOR},
+        {"24h Volume", "volume_notional", 0, NO_COLOR},
+        {"Last", "last", 0, NO_COLOR},
+        {"% Premium", "$custom", 0, COLOR},
+        // {"Spread", "spread", 0},
     };
 
     bool selectedItems[std::size(PARAMS)] = {true};
 
-    void RenderPositionsTable(const nlohmann::json &positions)
+    void RenderBookSummaryTable(const nlohmann::json &bookSummary)
     {
         int column_count = std::count(std::begin(selectedItems), std::end(selectedItems), true);
         if (column_count == 0)
             return;
 
-        if (!ImGui::BeginTable("AccPosition", column_count, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+        if (!ImGui::BeginTable("BookSummary", column_count, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
         {
             return;
         }
@@ -72,13 +58,9 @@ private:
         }
         ImGui::TableHeadersRow();
 
-        for (const auto &item : positions)
+        for (const auto &item : bookSummary)
         {
             ImGui::TableNextRow();
-
-            bool active = item["direction"].get<std::string>() == "zero";
-            if (active)
-                ImGui::PushStyleColor(ImGuiCol_Text, GetColorFromImCol32(textDarkerColor));
 
             for (size_t i = 0; i < std::size(PARAMS); ++i)
             {
@@ -117,19 +99,10 @@ private:
                 {
                     if (param.json_key[0] == '$')
                     {
-                        double value, term1, term2;
-                        if (item["kind"] == "future")
-                        {
-                            term1 = item["floating_profit_loss"].get<double>();
-                            term2 = item["initial_margin"].get<double>();
-                            value = term1 / term2 * 100;
-                        }
-                        else
-                        {
-                            term1 = item["mark_price"].get<double>();
-                            term2 = item["index_price"].get<double>();
-                            value = (term1 - term2) / term2 * 100;
-                        }
+                        double value;
+                        double term1 = item["mark_price"].get<double>();
+                        double term2 = item["estimated_delivery_price"].get<double>();
+                        value = (term1 - term2) / term2 * 100;
                         snprintf(buffer, BUFFER_SIZE, "%.4f", value);
                         ImVec4 color;
                         if (param.color == COLOR)
@@ -150,9 +123,6 @@ private:
                         ImGui::TextUnformatted("-");
                 }
             }
-
-            if (active)
-                ImGui::PopStyleColor();
         }
 
         ImGui::EndTable();
@@ -160,9 +130,9 @@ private:
 
     void RenderParamCombo()
     {
-        if (ImGui::BeginCombo("##PositionParamsToDisplay", "Selected Parameters", ImGuiComboFlags_NoPreview))
+        if (ImGui::BeginCombo("##BookSummaryParamsToDisplay", "Selected Parameters", ImGuiComboFlags_NoPreview))
         {
-            for (size_t i = 3; i < std::size(PARAMS); ++i)
+            for (size_t i = 1; i < std::size(PARAMS); ++i)
             {
                 ImGui::Selectable(PARAMS[i].label, &selectedItems[i], ImGuiSelectableFlags_DontClosePopups);
             }
@@ -191,7 +161,7 @@ private:
     }
 
 public:
-    PositionsRenderer(WebSocketHandler &ws_client) : ws_client(ws_client)
+    BookSummaryRenderer(WebSocketHandler &ws_client) : ws_client(ws_client)
     {
         this->FetchData();
 
@@ -202,30 +172,42 @@ public:
         selectedItems[4] = true;
         selectedItems[5] = true;
         selectedItems[6] = true;
-        selectedItems[7] = true;
-    };
+    }
 
     void FetchData() override
     {
-        ws_client.FetchPositions();
+        ws_client.FetchBookSummary("BTC", "future");
+        ws_client.FetchBookSummary("ETH", "future");
         last_refresh = std::chrono::system_clock::now();
     }
 
     void Render() override
     {
-        ImGui::Begin("Account Positions", nullptr,
+        ImGui::Begin("Instrument Summary", nullptr,
                      ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse);
 
-        const auto &positions = ws_client.GetPositions();
-        if (!positions.empty())
+        ImGui::BeginTabBar("#BookSummaryTabBar");
+        if (ImGui::BeginTabItem("BTC"))
         {
-            RenderPositionsTable(positions);
-            RenderParamCombo();
-            RenderLastUpdateTime(ws_client.GetPositionsReqTime());
+            auto bookSummary = ws_client.GetBookSummary("BTC", "future");
+            if (!bookSummary.empty())
+                RenderBookSummaryTable(bookSummary);
+            else
+                ImGui::TextDisabled("Loading data...");
+            ImGui::EndTabItem();
         }
-        else
-            ImGui::TextDisabled("Loading data...");
-
+        if (ImGui::BeginTabItem("ETH"))
+        {
+            auto bookSummary = ws_client.GetBookSummary("ETH", "future");
+            if (!bookSummary.empty())
+                RenderBookSummaryTable(bookSummary);
+            else
+                ImGui::TextDisabled("Loading data...");
+            ImGui::EndTabItem();
+        }
+        ImGui::EndTabBar();
+        RenderParamCombo();
+        RenderLastUpdateTime(ws_client.GetBookSummaryReqTime());
         ImGui::End();
 
         if (ShouldAutoRefresh())
@@ -234,5 +216,8 @@ public:
         }
     }
 
-    std::string tabName() override { return "Positions"; }
+    std::string tabName() override
+    {
+        return "Instrument Summary";
+    }
 };

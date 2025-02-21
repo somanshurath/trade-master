@@ -19,6 +19,9 @@
     <Filter Include="src\app">
       <UniqueIdentifier>{FDEA2FA9-69CA-AE44-72E2-391BDE4015A6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\common">
+      <UniqueIdentifier>{E5D74254-D18F-84A1-3A97-5DFD266E1F92}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\network">
       <UniqueIdentifier>{C6028F14-32B8-070A-BBAC-01E12761FE0D}</UniqueIdentifier>
     </Filter>
@@ -33,6 +36,12 @@
     </Filter>
     <Filter Include="src\ui\Landing">
       <UniqueIdentifier>{A6D73631-92A5-2A37-7B39-9B5D67A6069C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui\MarketData">
+      <UniqueIdentifier>{0777A66A-738D-A400-BC04-3022285A7588}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui\Orders">
+      <UniqueIdentifier>{780F3738-E4CF-B26E-AD0A-FCEB198AF74A}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\utils">
       <UniqueIdentifier>{6DAA42B6-D914-F72C-2253-A8D28EFCD481}</UniqueIdentifier>
@@ -51,6 +60,9 @@
     <ClInclude Include="src\app\AppLayer.h">
       <Filter>src\app</Filter>
     </ClInclude>
+    <ClInclude Include="src\common\Instruments.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
     <ClInclude Include="src\network\WebSocketHandler.h">
       <Filter>src\network</Filter>
     </ClInclude>
@@ -60,11 +72,23 @@
     <ClInclude Include="src\ui\AccountManagement\Positions.h">
       <Filter>src\ui\AccountManagement</Filter>
     </ClInclude>
+    <ClInclude Include="src\ui\BaseRenderer.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
     <ClInclude Include="src\ui\ControlPanel.h">
       <Filter>src\ui</Filter>
     </ClInclude>
     <ClInclude Include="src\ui\Landing\Login.h">
       <Filter>src\ui\Landing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\MarketData\BookSummary.h">
+      <Filter>src\ui\MarketData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\Orders\OpenOrders.h">
+      <Filter>src\ui\Orders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\Orders\OrderPlacement.h">
+      <Filter>src\ui\Orders</Filter>
     </ClInclude>
     <ClInclude Include="src\utils\env\env.example.h">
       <Filter>src\utils\env</Filter>
@@ -108,6 +132,9 @@
       <Filter>src\network\api</Filter>
     </ClCompile>
     <ClCompile Include="src\network\api\MarketData.cpp">
+      <Filter>src\network\api</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\api\Orders.cpp">
       <Filter>src\network\api</Filter>
     </ClCompile>
     <ClCompile Include="src\utils\fonts\Fonts.cpp">

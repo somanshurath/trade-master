@@ -4,19 +4,27 @@
 #include <string>
 #include "../utils/layout/ThemeUI.h"
 #include "../utils/fonts/Fonts.h"
+#include "./BaseRenderer.h"
 #include "../network/WebSocketHandler.h"
 
 #include "AccountManagement/AccountSummary.h"
 #include "AccountManagement/Positions.h"
+#include "Orders/OpenOrders.h"
+#include "MarketData/BookSummary.h"
 #include <bitset>
 
 class ControlPanel
 {
 public:
-    ControlPanel(WebSocketHandler &ws_client_inp)
-        : ws_client(ws_client_inp), account_summary_renderer(ws_client_inp), positions_renderer(ws_client_inp)
+    ControlPanel(WebSocketHandler &ws_client_inp) : ws_client(ws_client_inp)
+    {};
+
+    void InitRenderers()
     {
-        tabToggleState.set();
+        renderers.push_back(std::make_unique<AccountSummaryRenderer>(ws_client));
+        renderers.push_back(std::make_unique<PositionsRenderer>(ws_client));
+        renderers.push_back(std::make_unique<OpenOrdersRenderer>(ws_client));
+        renderers.push_back(std::make_unique<BookSummaryRenderer>(ws_client));
     }
 
     void Render()
@@ -26,62 +34,36 @@ public:
 
         ImGui::SeparatorText("Account Management");
 
-        const char *tabs[] = {"Account Summary", "Open Positions"};
-        bool changed = false;
-
-        for (int i = 0; i < 2; ++i)
+        for (auto &renderer : renderers)
         {
-            if (!tabToggleState[i])
+            bool toBeRendered = renderer->IsVisible();
+            if (!toBeRendered)
             {
                 ImGui::PushStyleColor(ImGuiCol_Button, GetColorFromImCol32(backgroundColor));
-                changed = true;
-            }
 
-            if (ImGui::Button(tabs[i], ImVec2(120, 0)))
-            {
-                if (i == 0)
+                if (ImGui::Button(renderer->tabName().c_str(), ImVec2(140, 0)))
                 {
-                    account_summary_renderer.Toggle();
+                    renderer->Toggle();
                 }
-                else if (i == 1)
-                {
-                    positions_renderer.Toggle();
-                }
-                tabToggleState[i].flip();
-            }
-
-            if (changed)
-            {
                 ImGui::PopStyleColor();
-                changed = false;
             }
-
-            if (i == 0)
+            else
             {
-                account_summary_renderer.Render();
+                if (ImGui::Button(renderer->tabName().c_str(), ImVec2(140, 0)))
+                {
+                    renderer->Toggle();
+                }
+                renderer->Render();
             }
-            else if (i == 1)
-            {
-                positions_renderer.Render();
-            }
-
             ImGui::SameLine();
 
             ImGui::PushFont(g_iconsFont);
             ImGui::SetCursorPosX(ImGui::GetWindowWidth() - ImGui::CalcTextSize("Z").x - ImGui::GetStyle().ItemSpacing.x - 10);
-            ImGui::PushID(i);
+            ImGui::PushID(&renderer - &renderers[0]);
             if (ImGui::Button("Z"))
             {
-                if (i == 0)
-                {
-                    ws_client.FetchAccountSummary();
-                    account_summary_renderer.Show();
-                }
-                else if (i == 1)
-                {
-                    ws_client.FetchPositions();
-                    positions_renderer.Show();
-                }
+                renderer->FetchData();
+                renderer->Show();
             }
             ImGui::PopID();
             ImGui::PopFont();
@@ -97,8 +79,6 @@ public:
     }
 
 private:
-    AccountSummaryRenderer account_summary_renderer;
-    PositionsRenderer positions_renderer;
+    std::vector<std::unique_ptr<BaseRenderer>> renderers;
     WebSocketHandler &ws_client;
-    std::bitset<2> tabToggleState;
 };
