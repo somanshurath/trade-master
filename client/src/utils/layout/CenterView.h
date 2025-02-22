@@ -1,11 +1,13 @@
 #pragma once
 #include "imgui.h"
 
-class CenteredControlWrapper {
+class CenteredControlWrapper
+{
 public:
     explicit CenteredControlWrapper(bool result) : result_(result) {}
 
-    operator bool() const {
+    operator bool() const
+    {
         return result_;
     }
 
@@ -13,12 +15,14 @@ private:
     bool result_;
 };
 
-class ControlCenterer {
+class ControlCenterer
+{
 public:
     ControlCenterer(ImVec2 windowSize) : windowSize_(windowSize) {}
 
-    template<typename Func>
-    CenteredControlWrapper operator()(Func control) const {
+    template <typename Func>
+    CenteredControlWrapper operator()(Func control) const
+    {
         ImVec2 originalPos = ImGui::GetCursorPos();
 
         // Draw offscreen to calculate size
@@ -27,7 +31,10 @@ public:
         ImVec2 controlSize = ImGui::GetItemRectSize();
 
         ImGui::SetCursorPos(ImVec2((windowSize_.x - controlSize.x) * 0.5f, originalPos.y));
+        // Alternative could be to use random int as ID
+        ImGui::PushID("#CenteredControl");
         control();
+        ImGui::PopID();
 
         return CenteredControlWrapper(ImGui::IsItemClicked());
     }
@@ -36,4 +43,4 @@ private:
     ImVec2 windowSize_;
 };
 
-#define CENTERED_CONTROL(control) ControlCenterer{ImGui::GetWindowSize()}([&]() { control; })
+#define CENTER(control) ControlCenterer{ImGui::GetWindowSize()}([&]() { control; })

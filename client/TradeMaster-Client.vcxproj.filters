@@ -34,11 +34,11 @@
     <Filter Include="src\ui\AccountManagement">
       <UniqueIdentifier>{339908D3-1FBE-5753-4809-3DE3348D5671}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\ui\Landing">
-      <UniqueIdentifier>{A6D73631-92A5-2A37-7B39-9B5D67A6069C}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\ui\MarketData">
       <UniqueIdentifier>{0777A66A-738D-A400-BC04-3022285A7588}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui\Misc">
+      <UniqueIdentifier>{7592C333-E147-3C29-6A3C-3600D6F0322D}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\ui\Orders">
       <UniqueIdentifier>{780F3738-E4CF-B26E-AD0A-FCEB198AF74A}</UniqueIdentifier>
@@ -75,14 +75,17 @@
     <ClInclude Include="src\ui\ControlPanel.h">
       <Filter>src\ui</Filter>
     </ClInclude>
-    <ClInclude Include="src\ui\Landing\Login.h">
-      <Filter>src\ui\Landing</Filter>
-    </ClInclude>
     <ClInclude Include="src\ui\MarketData\BookSummary.h">
       <Filter>src\ui\MarketData</Filter>
     </ClInclude>
     <ClInclude Include="src\ui\MarketData\ChartData.h">
       <Filter>src\ui\MarketData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\Misc\About.h">
+      <Filter>src\ui\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\Misc\Login.h">
+      <Filter>src\ui\Misc</Filter>
     </ClInclude>
     <ClInclude Include="src\ui\Orders\OpenOrders.h">
       <Filter>src\ui\Orders</Filter>

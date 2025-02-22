@@ -150,9 +150,10 @@
     <ClInclude Include="src\ui\AccountManagement\Positions.h" />
     <ClInclude Include="src\ui\BaseRenderer.h" />
     <ClInclude Include="src\ui\ControlPanel.h" />
-    <ClInclude Include="src\ui\Landing\Login.h" />
     <ClInclude Include="src\ui\MarketData\BookSummary.h" />
     <ClInclude Include="src\ui\MarketData\ChartData.h" />
+    <ClInclude Include="src\ui\Misc\About.h" />
+    <ClInclude Include="src\ui\Misc\Login.h" />
     <ClInclude Include="src\ui\Orders\OpenOrders.h" />
     <ClInclude Include="src\ui\Orders\OrderPlacement.h" />
     <ClInclude Include="src\utils\env\env.example.h" />

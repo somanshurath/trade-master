@@ -26,7 +26,9 @@ public:
     // Authentication
     void Authenticate(const std::string &client_id, const std::string &client_secret);
     void RefreshToken();
+    bool GetConnectionStatus() const { return connected; }
     bool IsAuthenticated() const { return authenticated; }
+    void SetClosing() { closing = true; }
 
     // Account
     void FetchAccountSummary();
@@ -115,6 +117,7 @@ private:
     std::string uri;
     bool connected{false};
     bool authenticated{false};
+    bool closing{false};
 
     // User information
     std::string user_id;

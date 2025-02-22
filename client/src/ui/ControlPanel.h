@@ -3,6 +3,7 @@
 #include <chrono>
 #include <string>
 #include "../utils/layout/ThemeUI.h"
+#include "../utils/layout/CenterView.h"
 #include "../utils/fonts/Fonts.h"
 #include "./BaseRenderer.h"
 #include "../network/WebSocketHandler.h"
@@ -17,16 +18,15 @@
 class ControlPanel
 {
 public:
-    ControlPanel(WebSocketHandler &ws_client_inp) : ws_client(ws_client_inp)
-    {};
+    ControlPanel(WebSocketHandler &ws_client_inp) : ws_client(ws_client_inp) {};
 
     void InitRenderers()
     {
+        renderers.push_back(std::make_unique<BookSummaryRenderer>(ws_client));
+        renderers.push_back(std::make_unique<ChartDataRenderer>(ws_client));
         renderers.push_back(std::make_unique<AccountSummaryRenderer>(ws_client));
         renderers.push_back(std::make_unique<PositionsRenderer>(ws_client));
         renderers.push_back(std::make_unique<OpenOrdersRenderer>(ws_client));
-        renderers.push_back(std::make_unique<BookSummaryRenderer>(ws_client));
-        renderers.push_back(std::make_unique<ChartDataRenderer>(ws_client));
     }
 
     void Render()
@@ -34,38 +34,44 @@ public:
         ImGui::Begin("Control Panel", nullptr,
                      ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse);
 
-        ImGui::SeparatorText("Account Management");
+        int demarcationIndex = 0;
 
-        for (auto &renderer : renderers)
+        for (int i = 0; i < renderers.size(); i++)
         {
-            bool toBeRendered = renderer->IsVisible();
+            if (demarcationIndex < demarcation.size() && i == demarcation[demarcationIndex])
+            {
+                ImGui::SeparatorText(demarcationNames[demarcationIndex].c_str());
+                demarcationIndex++;
+            }
+
+            bool toBeRendered = renderers[i]->IsVisible();
             if (!toBeRendered)
             {
                 ImGui::PushStyleColor(ImGuiCol_Button, GetColorFromImCol32(backgroundColor));
 
-                if (ImGui::Button(renderer->tabName().c_str(), ImVec2(140, 0)))
+                if (ImGui::Button(renderers[i]->tabName().c_str(), ImVec2(140, 0)))
                 {
-                    renderer->Toggle();
+                    renderers[i]->Toggle();
                 }
                 ImGui::PopStyleColor();
             }
             else
             {
-                if (ImGui::Button(renderer->tabName().c_str(), ImVec2(140, 0)))
+                if (ImGui::Button(renderers[i]->tabName().c_str(), ImVec2(140, 0)))
                 {
-                    renderer->Toggle();
+                    renderers[i]->Toggle();
                 }
-                renderer->Render();
+                renderers[i]->Render();
             }
             ImGui::SameLine();
 
             ImGui::PushFont(g_iconsFont);
             ImGui::SetCursorPosX(ImGui::GetWindowWidth() - ImGui::CalcTextSize("Z").x - ImGui::GetStyle().ItemSpacing.x - 10);
-            ImGui::PushID(&renderer - &renderers[0]);
+            ImGui::PushID(i);
             if (ImGui::Button("Z"))
             {
-                renderer->FetchData();
-                renderer->Show();
+                renderers[i]->FetchData();
+                renderers[i]->Show();
             }
             ImGui::PopID();
             ImGui::PopFont();
@@ -77,10 +83,19 @@ public:
             }
         }
 
+        ImGui::Dummy(ImVec2(0.0f, 5.0f));
+        if (CENTER(ImGui::Button("Logout", ImVec2(100, 0))))
+        {
+            ws_client.SetClosing();
+            ws_client.Close();
+        };
+
         ImGui::End();
     }
 
 private:
     std::vector<std::unique_ptr<BaseRenderer>> renderers;
     WebSocketHandler &ws_client;
+    std::array<int, 2> demarcation = {0, 2}; // 0 - Market Data, 1 - Account Management
+    std::array<std::string, 2> demarcationNames = {"Market Data", "Account Management"};
 };

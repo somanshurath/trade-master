@@ -123,6 +123,16 @@ void WebSocketHandler::OnClose(websocketpp::connection_hdl hdl)
 {
     std::cout << "WebSocket connection closed" << std::endl;
     connected = false;
+    authenticated = false;
+
+    // should i even be doing this?
+    // TODO: Improve this shit
+    closing = false;
+    if (!closing)
+    {
+        std::cout << "Reconnecting..." << std::endl;
+        Connect();
+    }
 }
 
 void WebSocketHandler::OnError(websocketpp::connection_hdl hdl)

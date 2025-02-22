@@ -6,7 +6,7 @@
 #include "examples/libs/glfw/include/GLFW/glfw3.h"
 #include "../network/WebSocketHandler.h"
 #include "../ui/ControlPanel.h"
-#include "../ui/Landing/Login.h"
+#include "../ui/Misc/Login.h"
 
 class AppLayer {
 private:

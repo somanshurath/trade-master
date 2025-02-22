@@ -146,6 +146,7 @@ private:
     {
         auto now = std::chrono::system_clock::now();
         auto age = std::chrono::duration_cast<std::chrono::seconds>(now - req_time).count();
+        if (age > 60) return;
 
         ImGui::SetCursorPosX(ImGui::GetWindowWidth() - ImGui::CalcTextSize("10s").x - ImGui::GetStyle().ItemSpacing.x);
         ImGui::TextColored(
